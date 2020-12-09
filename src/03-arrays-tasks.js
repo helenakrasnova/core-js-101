@@ -35,8 +35,10 @@ function findElement(arr, value) {
  *    2 => [ 1, 3 ]
  *    5 => [ 1, 3, 5, 7, 9 ]
  */
-function generateOdds(/* len */) {
-  throw new Error('Not implemented');
+function generateOdds(len) {
+  const arr = [];
+  arr.length = len;
+  return arr.fill(0).map((item, index) => index * 2 + 1);
 }
 
 
@@ -209,8 +211,10 @@ function getTail(arr, n) {
  *    +'20,21,22,23,24\n'
  *    +'30,31,32,33,34'
  */
-function toCsvText(/* arr */) {
-  throw new Error('Not implemented');
+function toCsvText(arr) {
+  const array = [];
+  arr.map((item) => array.push(`${item.join(',')}`));
+  return array.join('\n');
 }
 
 /**
@@ -260,8 +264,10 @@ function getMovingSum(/* arr */) {
  * [ 'a', 'b', 'c' , null ]  => [ "b", null ]
  * [ "a" ] => []
  */
-function getSecondItems(/* arr */) {
-  throw new Error('Not implemented');
+function getSecondItems(arr) {
+  const array = [];
+  arr.map((item, index) => (index % 2 !== 0 ? array.push(item) : false));
+  return array;
 }
 
 
@@ -281,6 +287,12 @@ function getSecondItems(/* arr */) {
  */
 function propagateItemsByPositionIndex(/* arr */) {
   throw new Error('Not implemented');
+  // const newArr = [];
+  // if (arr.length >= 2) {
+  //   arr.map((item, index) => newArr.fill(item, index + 1, index + 1));
+  //   return newArr;
+  // }
+  // return arr;
 }
 
 
@@ -337,8 +349,14 @@ function getPositivesCount(arr) {
  *   [ 'nine','eight','nine','eight'] => [ 'eight','eight','nine','nine']
  *   [ 'one','one','one','zero' ]     => [ 'zero','one','one','one' ]
  */
-function sortDigitNamesByNumericOrder(/* arr */) {
-  throw new Error('Not implemented');
+function sortDigitNamesByNumericOrder(arr) {
+  const numbersArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  const newArr = [];
+  const result = [];
+  arr.map((item) => newArr.push(numbersArray.indexOf(item)));
+  newArr.sort((a, b) => a - b);
+  newArr.map((item) => result.push(numbersArray[item]));
+  return result;
 }
 
 /**
@@ -353,9 +371,8 @@ function sortDigitNamesByNumericOrder(/* arr */) {
  *   [ -1, 1, -1, 1 ]      => 0
  *   [ 1, 10, 100, 1000 ]  => 1111
  */
-function getItemsSum(/* arr */) {
-  throw new Error('Not implemented');
-  // return arr.length === 0 ? arr.reduce((a, b) => a + b) : 0;
+function getItemsSum(arr) {
+  return arr.length === 0 ? 0 : arr.reduce((a, b) => a + b);
 }
 
 /**
@@ -370,8 +387,10 @@ function getItemsSum(/* arr */) {
  *  [ -1, 'false', null, 0 ] => 2
  *  [ null, undefined, NaN, false, 0, '' ]  => 6
  */
-function getFalsyValuesCount(/* arr */) {
-  throw new Error('Not implemented');
+function getFalsyValuesCount(arr) {
+  const newArr = [];
+  arr.map((item) => (item ? false : newArr.push(item)));
+  return newArr.length;
 }
 
 /**
@@ -388,8 +407,8 @@ function getFalsyValuesCount(/* arr */) {
  *    [ null, undefined, null ], null => 2
  *    [ true, 0, 1, 'true' ], true => 1
  */
-function findAllOccurences(/* arr, item */) {
-  throw new Error('Not implemented');
+function findAllOccurences(arr, item) {
+  return arr.filter((i) => i === item).length;
 }
 
 /**
@@ -434,8 +453,9 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  arr.sort((f, s) => (f.city >= s.city ? 1 : -1));
+  return arr.sort((f, s) => (f.country >= s.country ? 1 : -1));
 }
 
 /**
@@ -561,6 +581,7 @@ function selectMany(/* arr, childrenSelector */) {
  */
 function getElementByIndexes(/* arr, indexes */) {
   throw new Error('Not implemented');
+  // return indexes.reduce((prev, curr) => prev[curr], arr);
 }
 
 
@@ -582,8 +603,16 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  if (arr.length % 2 === 0) {
+    const firstArr = arr.slice(0, arr.length / 2);
+    const secondArr = arr.slice(arr.length / 2);
+    return secondArr.concat(firstArr);
+  }
+  const middleIndex = (arr.length - 1) / 2;
+  const firstArr = arr.slice(0, middleIndex);
+  const secondArr = arr.slice(middleIndex + 1);
+  return secondArr.concat(arr[middleIndex], firstArr);
 }
 
 
