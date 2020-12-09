@@ -32,6 +32,8 @@
  * @return {RegExp}
  */
 function getRegexForGuid() {
+  // const regexp = /\w{8}-\w{4}-\w{4}-\w{4}-\w{8}/;
+  // return regexp.match();
   throw new Error('Not implemented');
 }
 
