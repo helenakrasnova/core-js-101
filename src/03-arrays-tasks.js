@@ -249,19 +249,15 @@ function toArrayOfSquares(arr) {
  *   [ 0, 0, 0, 0, 0]         => [ 0, 0, 0, 0, 0]
  *   [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] => [ 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 ]
  */
-function getMovingSum(/* arr */) {
-  // const newArr = [];
-  // arr.map((item, index) => {
-  //   if (index === 0) {
-  //     newArr.push(item);
-  //   } else {
-  //     const result = newArr.reduce((a, b) => a + b);
-  //     newArr.push(item + result);
-  //   }
-  //   return newArr;
-  // });
-  // return newArr;
-  throw new Error('Not implemented');
+function getMovingSum(arr) {
+  const newArr = [];
+  newArr.push(arr[0]);
+  arr.reduce((prev, curr, indexC) => {
+    const p = prev + curr;
+    newArr[indexC] = p;
+    return p;
+  });
+  return newArr;
 }
 
 /**
@@ -296,14 +292,16 @@ function getSecondItems(arr) {
  *  [ 'a', 'b', 'c', null ] => [ 'a', 'b','b', 'c','c','c',  null,null,null,null ]
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  throw new Error('Not implemented');
-  // const newArr = [];
-  // if (arr.length >= 2) {
-  //   arr.map((item, index) => newArr.fill(item, index + 1, index + 1));
-  //   return newArr;
-  // }
-  // return arr;
+function propagateItemsByPositionIndex(arr) {
+  let newArr = [];
+  arr.map((value, item) => {
+    const filledArray = [];
+    filledArray.length = item + 1;
+    filledArray.fill(value);
+    newArr = newArr.concat(filledArray);
+    return newArr;
+  });
+  return newArr;
 }
 
 
@@ -504,8 +502,11 @@ function getIdentityMatrix(/* n */) {
  *     0, 100 => [ 0, 1, 2, ..., 100 ]
  *     3, 3   => [ 3 ]
  */
-function getIntervalArray(/* start, end */) {
-  throw new Error('Not implemented');
+function getIntervalArray(start, end) {
+  const newArr = [];
+  newArr.length = (end - start) + 1;
+  newArr.fill(0);
+  return newArr.map((value, item) => start + item);
 }
 
 /**
@@ -590,9 +591,9 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
-  // return indexes.reduce((prev, curr) => prev[curr], arr);
+function getElementByIndexes(arr, indexes) {
+  const result = indexes.reduce((prev, curr) => prev[curr], arr);
+  return result;
 }
 
 
