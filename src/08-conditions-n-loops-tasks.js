@@ -134,8 +134,13 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  const firstRight = rect1.left + rect1.width;
+  const secondRight = rect2.left + rect2.width;
+  const firstBottom = rect1.top + rect1.height;
+  const secondBottom = rect2.top + rect2.height;
+  return Math.max(rect1.left, rect2.left) < Math.min(firstRight, secondRight)
+    && Math.max(rect1.top, rect2.top) < Math.min(firstBottom, secondBottom);
 }
 
 
@@ -165,8 +170,8 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  return (point.x - circle.center.x) ** 2 + (point.y - circle.center.y) ** 2 < circle.radius ** 2;
 }
 
 
@@ -286,8 +291,25 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const str = ccn.toString().split('').reverse().join('');
+  let index = 1;
+  const result = [];
+  for (let i = 0; i < str.length; i += 1) {
+    if (index % 2 === 0) {
+      let mult = +str[i] * 2;
+      mult = mult > 9 ? mult - 9 : mult;
+      result.push(mult);
+    } else {
+      result.push(+str[i]);
+    }
+    index += 1;
+  }
+  let sum = 0;
+  for (let i = 0; i < result.length; i += 1) {
+    sum += result[i];
+  }
+  return sum % 10 === 0;
 }
 
 /**
@@ -339,21 +361,25 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  // const openBrackets = ['{', '[', '(', '<'];
-  // const closeBrackets = ['}', ']', ')', '>'];
-  // const arr = [];
-  // for (let i = 0; i < str.length; i += 1) {
-  //   if (openBrackets.indexOf(str[i]) >= 0) {
-  //     arr.push(openBrackets.indexOf(str[i]));
-  //   } else if (closeBrackets.indexOf(str[i]) >= 0) {
-  //     arr.push(closeBrackets.indexOf(str[i]));
-  //   }
-  // }
-  // const firstValue = openArr.sort().join('');
-  // const secondValue = closeArr.sort().join('');
-  // return firstValue === secondValue;
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const openBrackets = ['{', '[', '(', '<'];
+  const closeBrackets = ['}', ']', ')', '>'];
+  const arr = [];
+  for (let i = 0; i < str.length; i += 1) {
+    if (openBrackets.indexOf(str[i]) >= 0) {
+      arr.push(str[i]);
+    } else if (closeBrackets.indexOf(str[i]) >= 0) {
+      if (arr.length === 0) {
+        return false;
+      }
+      if (closeBrackets.indexOf(str[i]) === openBrackets.indexOf(arr[arr.length - 1])) {
+        arr.pop();
+      } else {
+        return false;
+      }
+    }
+  }
+  return arr.length === 0;
 }
 
 
@@ -394,7 +420,7 @@ function toNaryString(num, n) {
 
 
 /**
- * Returns the commom directory path for specified array of full filenames.
+ * Returns the common directory path for specified array of full filenames.
  *
  * @param {array} pathes
  * @return {string}
@@ -405,8 +431,23 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(paths) {
+  const result = paths.map((item) => item.split('/'));
+  let resultStr = '';
+  for (let j = 0; j < result[0].length; j += 1) {
+    const str = result[0][j];
+    let isCommonPath = true;
+    for (let i = 0; i < result.length; i += 1) {
+      if (str !== result[i][j]) {
+        isCommonPath = false;
+        break;
+      }
+    }
+    if (isCommonPath) {
+      resultStr += `${str}/`;
+    }
+  }
+  return resultStr;
 }
 
 
@@ -463,8 +504,52 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const X = 'X';
+  const O = '0';
+  function checkArrayRow(arr, symbol) {
+    let sameSymbol = true;
+    if (arr.length < 3) {
+      return false;
+    }
+    for (let i = 0; i < arr.length; i += 1) {
+      if (arr[i] !== symbol) {
+        sameSymbol = false;
+      }
+    }
+    return sameSymbol;
+  }
+  function checkArrayColumn(array, symbol, coordinate) {
+    if (array.length < 3) {
+      return false;
+    }
+    for (let i = 0; i < array.length; i += 1) {
+      if (array[i][coordinate] !== symbol) {
+        return false;
+      }
+    }
+    return true;
+  }
+  function checkArrayDiagonal(arr, symbol) {
+    if ((arr[0][0] === arr[1][1] && arr[1][1] === arr[2][2] && arr[2][2] === symbol)
+      || (arr[0][2] === arr[1][1] && arr[1][1] === arr[2][0] && arr[2][0] === symbol)) {
+      return true;
+    }
+    return false;
+  }
+  for (let i = 0; i < position.length; i += 1) {
+    if (checkArrayRow(position[i], X)
+      || checkArrayColumn(position, X, i)
+      || checkArrayDiagonal(position, X)) {
+      return X;
+    }
+    if (checkArrayRow(position[i], O)
+      || checkArrayColumn(position, O, i)
+      || checkArrayDiagonal(position, O)) {
+      return O;
+    }
+  }
+  return undefined;
 }
 
 

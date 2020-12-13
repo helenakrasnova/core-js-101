@@ -81,10 +81,15 @@ function getPolynom() {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const cache = {};
+  return () => {
+    if (!cache.prevResult) {
+      cache.prevResult = func();
+    }
+    return cache.prevResult;
+  };
 }
-
 
 /**
  * Returns the function trying to call the passed function and if it throws,
@@ -101,8 +106,20 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  let localAttempts = attempts;
+  return () => {
+    do {
+      try {
+        const result = func();
+        return result;
+      } catch (e) {
+        localAttempts -= 1;
+      }
+    }
+    while (localAttempts > 0);
+    return undefined;
+  };
 }
 
 
@@ -130,6 +147,11 @@ function retry(/* func, attempts */) {
  *
  */
 function logger(/* func, logFunc */) {
+  // return (...args) => {
+  //   logFunc(`${func.name}(${args}) starts`);
+  //   func(args);
+  //   logFunc(`${func.name}(${args}) ends`);
+  // };
   throw new Error('Not implemented');
 }
 
@@ -169,8 +191,18 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let initialId = startFrom;
+  let isExecuted = false;
+  return () => {
+    if (!isExecuted) {
+      isExecuted = true;
+      return initialId;
+    }
+    initialId += 1;
+    isExecuted = true;
+    return initialId;
+  };
 }
 
 
